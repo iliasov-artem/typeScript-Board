@@ -1,23 +1,24 @@
+import { useAppState } from './state/AppStateContext';
+
+import { addList } from './state/actions';
+
 import { AppContainer } from './styles';
 import { AddNewItem } from './AddNewItem';
-import { Card } from './Card';
+import { CustomDragLayer } from './CustomDragLayer';
 import { Column } from './Column';
 
 export const App = () => {
+	const { lists, dispatch } = useAppState();
+
 	return (
 		<AppContainer>
-			<Column text="To Do">
-				<Card text="Generate app" />
-			</Column>
-			<Column text="In Progress">
-				<Card text="Learn Typescript" />
-			</Column>
-			<Column text="Done">
-				<Card text="Begin using static typing" />
-			</Column>
+			<CustomDragLayer />
+			{lists.map(({ id, text }) => (
+				<Column id={id} key={id} text={text} />
+			))}
 			<AddNewItem
 				toggleButtonText="+ Add another list"
-				onAdd={(text) => console.log(text)}
+				onAdd={(text) => dispatch(addList(text))}
 			/>
 		</AppContainer>
 	);
